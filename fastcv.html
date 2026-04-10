@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elite CV Architect Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #ffffff; color: #1e293b; }
+        
+        /* Input Design */
+        .input-container { background: #f1f5f9; border-bottom: 2px solid #e2e8f0; padding: 40px 20px; }
+        .card-ui { 
+            background: #ffffff; border: 1px solid #e2e8f0; border-radius: 20px; 
+            padding: 24px; transition: all 0.3s ease;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+        .card-ui:focus-within { border-color: #2563eb; transform: translateY(-2px); }
+
+        /* CV Page Design */
+        .cv-wrapper { background: #ffffff; padding: 40px 0; display: flex; justify-content: center; border-top: 4px solid #f1f5f9; }
+        .cv-page { width: 210mm; min-height: 297mm; background: white; display: flex; border: 1px solid #d1d5db; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+        .sidebar { width: 32%; padding: 40px 20px; color: white; }
+        .main-content { width: 68%; padding: 45px 40px; }
+
+        /* Modern Highlighted Headings */
+        .section-title { 
+            display: block; width: 100%; padding: 8px 15px; 
+            background: #f8fafc; border-left: 5px solid #2563eb;
+            font-weight: 800; font-size: 13px; text-transform: uppercase;
+            letter-spacing: 1.5px; margin-bottom: 20px; color: #0f172a;
+        }
+
+        .skill-bar-bg { width: 100%; height: 7px; background: rgba(255,255,255,0.2); border-radius: 10px; margin-top: 5px; overflow: hidden; }
+        .skill-bar-fill { height: 100%; border-radius: 10px; transition: width 1s ease; }
+
+        .styled-field { width: 100%; padding: 12px 16px; border: 1.5px solid #e2e8f0; border-radius: 10px; font-size: 14px; margin-bottom: 10px; }
+        
+        @media print { .no-print { display: none; } .cv-wrapper { padding: 0; } .cv-page { border: none; } }
+    </style>
+</head>
+<body>
+
+    <div class="input-container no-print">
+        <div class="max-w-7xl mx-auto">
+            <header class="flex flex-col md:flex-row justify-between items-center mb-10 gap-6">
+                <div>
+                    <h1 class="text-3xl font-black text-slate-900 tracking-tighter">ELITE<span class="text-blue-600">CV</span></h1>
+                    <p class="text-slate-400 font-bold text-[11px] uppercase tracking-widest">Professional Builder</p>
+                </div>
+                <div class="flex gap-4 items-center bg-white p-3 rounded-2xl shadow-sm">
+                    <div class="flex items-center gap-3 border-r pr-4">
+                        <label class="text-[10px] font-black">THEME COLOR</label>
+                        <input type="color" id="bgColor" value="#1e293b" oninput="updateStyles()" class="w-8 h-8 rounded-lg cursor-pointer">
+                        <input type="color" id="accentColor" value="#2563eb" oninput="updateStyles()" class="w-8 h-8 rounded-lg cursor-pointer">
+                    </div>
+                    <button onclick="downloadPDF()" class="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-xl font-bold transition-all">Download PDF</button>
+                </div>
+            </header>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="space-y-6">
+                    <div class="card-ui">
+                        <h4 class="font-bold mb-4 text-blue-600">👤 Identity</h4>
+                        <input type="file" accept="image/*" onchange="previewImage(event)" class="text-xs mb-4 w-full">
+                        <div class="grid grid-cols-2 gap-4">
+                            <input type="text" id="inName" placeholder="Name" class="styled-field" oninput="sync()">
+                            <input type="text" id="inJob" placeholder="Title" class="styled-field" oninput="sync()">
+                        </div>
+                        <input type="text" id="inEmail" placeholder="Email" class="styled-field" oninput="sync()">
+                        <input type="text" id="inPhone" placeholder="Phone" class="styled-field" oninput="sync()">
+                        <input type="text" id="inAddress" placeholder="Location" class="styled-field" oninput="sync()">
+                        <textarea id="inAbout" placeholder="Summary..." rows="3" class="styled-field" oninput="sync()"></textarea>
+                    </div>
+                    <div class="card-ui">
+                        <div class="flex justify-between items-center mb-4">
+                            <h4 class="font-bold text-blue-600">⚡ Skills (%)</h4>
+                            <button onclick="addSkill()" class="bg-blue-50 text-blue-600 px-3 py-1 rounded text-xs font-bold">+ ADD</button>
+                        </div>
+                        <div id="skillInputList" class="space-y-2"></div>
+                    </div>
+                </div>
+
+                <div class="space-y-6">
+                    <div class="card-ui">
+                        <div class="flex justify-between items-center mb-4">
+                            <h4 class="font-bold text-blue-600">🎓 Education</h4>
+                            <button onclick="addEdu()" class="bg-blue-50 text-blue-600 px-3 py-1 rounded text-xs font-bold">+ ADD</button>
+                        </div>
+                        <div id="eduList" class="space-y-4"></div>
+                    </div>
+                    <div class="card-ui">
+                        <div class="flex justify-between items-center mb-4">
+                            <h4 class="font-bold text-blue-600">💼 Experience</h4>
+                            <button onclick="addWork()" class="bg-blue-50 text-blue-600 px-3 py-1 rounded text-xs font-bold">+ ADD</button>
+                        </div>
+                        <div id="workList" class="space-y-4"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-6 card-ui grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <h4 class="font-bold mb-2 text-blue-600 uppercase text-xs">🌐 Languages</h4>
+                    <input type="text" id="inLang" placeholder="English, Bengali..." class="styled-field" oninput="sync()">
+                </div>
+                <div>
+                    <h4 class="font-bold mb-2 text-blue-600 uppercase text-xs">🖋️ Declaration</h4>
+                    <textarea id="inDec" class="styled-field text-xs h-20" oninput="sync()">I hereby declare that all the information provided above is true and correct to the best of my knowledge and belief.</textarea>
+                    <input type="text" id="inDate" placeholder="Date: 10-04-2026" class="styled-field" oninput="sync()">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="cv-wrapper">
+        <div id="cv-render" class="cv-page">
+            <div id="sidebarUI" class="sidebar bg-slate-800">
+                <div class="w-full aspect-square bg-white rounded-2xl shadow-xl mb-10 overflow-hidden border-4 border-white">
+                    <img id="outPhoto" src="https://via.placeholder.com/200" class="w-full h-full object-cover">
+                </div>
+                <div class="space-y-10">
+                    <div class="text-[11px] leading-relaxed">
+                        <h4 class="font-black uppercase tracking-[3px] mb-4 opacity-40">Contact</h4>
+                        <p>✉️ <span id="outEmail">email@domain.com</span></p>
+                        <p>📞 <span id="outPhone">+880 1XXX...</span></p>
+                        <p>📍 <span id="outAddress">Location</span></p>
+                    </div>
+                    <div class="text-[11px]">
+                        <h4 class="font-black uppercase tracking-[3px] mb-4 opacity-40">Skills</h4>
+                        <div id="outSkills" class="space-y-4"></div>
+                    </div>
+                    <div class="text-[11px]">
+                        <h4 class="font-black uppercase tracking-[3px] mb-4 opacity-40">Languages</h4>
+                        <ul id="outLang" class="space-y-2"></ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="main-content">
+                <div class="mb-14 border-l-[10px] pl-6 border-blue-600" id="headerBorder">
+                    <h5 class="text-blue-600 font-black text-[10px] tracking-[6px] mb-1 uppercase">Curriculum Vitae</h5>
+                    <h1 id="outName" class="text-5xl font-black text-slate-900 uppercase tracking-tighter">YOUR NAME</h1>
+                    <p id="outJob" class="text-xl font-bold text-slate-400 mt-1 italic">Designation</p>
+                </div>
+
+                <div class="section-title" id="h1">About Me</div>
+                <p id="outAbout" class="text-[12px] text-slate-600 leading-relaxed text-justify mb-10 italic">Your summary...</p>
+
+                <div class="section-title" id="h2">Work Experience</div>
+                <div id="outWork" class="space-y-6 mb-10"></div>
+
+                <div class="section-title" id="h3">Education Background</div>
+                <div id="outEdu" class="space-y-6 mb-10"></div>
+
+                <div class="section-title" id="h4">Declaration</div>
+                <p id="outDec" class="text-[11px] text-slate-500 italic mb-10 leading-relaxed"></p>
+
+                <div class="mt-20 flex justify-between items-end border-t-2 pt-8 border-slate-100">
+                    <p class="text-[11px] font-bold">Date: <span id="outDate" class="font-normal underline">10-04-2026</span></p>
+                    <div class="text-center w-40 border-t-2 border-slate-900 pt-1">
+                        <p class="text-[10px] font-black uppercase">Signature</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function addEdu() {
+            const div = document.createElement('div');
+            div.className = "p-4 bg-slate-50 rounded-xl border relative";
+            div.innerHTML = `<button onclick="this.parentElement.remove(); sync()" class="absolute top-2 right-2 text-red-500 text-[10px] font-bold">✕ REMOVE</button>
+            <input type="text" placeholder="Institution" class="styled-field text-xs mb-2 edu-inst" oninput="sync()">
+            <div class="grid grid-cols-2 gap-2"><input type="text" placeholder="Degree" class="styled-field text-xs edu-deg" oninput="sync()">
+            <input type="text" placeholder="Result" class="styled-field text-xs edu-gpa" oninput="sync()"></div>
+            <input type="text" placeholder="Year" class="styled-field text-xs edu-dur" oninput="sync()">`;
+            document.getElementById('eduList').appendChild(div);
+        }
+
+        function addWork() {
+            const div = document.createElement('div');
+            div.className = "p-4 bg-slate-50 rounded-xl border relative";
+            div.innerHTML = `<button onclick="this.parentElement.remove(); sync()" class="absolute top-2 right-2 text-red-500 text-[10px] font-bold">✕ REMOVE</button>
+            <input type="text" placeholder="Company" class="styled-field text-xs mb-2 work-comp" oninput="sync()">
+            <input type="text" placeholder="Position" class="styled-field text-xs work-pos" oninput="sync()">
+            <input type="text" placeholder="Duration" class="styled-field text-xs work-dur" oninput="sync()">
+            <textarea placeholder="Description" rows="2" class="styled-field text-xs work-desc" oninput="sync()"></textarea>`;
+            document.getElementById('workList').appendChild(div);
+        }
+
+        function addSkill() {
+            const div = document.createElement('div');
+            div.className = "flex gap-2 items-center bg-slate-50 p-2 rounded-lg border";
+            div.innerHTML = `<input type="text" placeholder="Skill" class="styled-field text-xs mb-0 skill-name" oninput="sync()">
+            <input type="number" placeholder="%" class="styled-field text-xs mb-0 w-20 skill-perc" oninput="sync()">
+            <button onclick="this.parentElement.remove(); sync()" class="text-red-500 px-2 font-bold">✕</button>`;
+            document.getElementById('skillInputList').appendChild(div);
+        }
+
+        function sync() {
+            document.getElementById('outName').innerText = document.getElementById('inName').value || "YOUR NAME";
+            document.getElementById('outJob').innerText = document.getElementById('inJob').value || "TITLE";
+            document.getElementById('outEmail').innerText = document.getElementById('inEmail').value || "email@domain.com";
+            document.getElementById('outPhone').innerText = document.getElementById('inPhone').value || "017XX...";
+            document.getElementById('outAddress').innerText = document.getElementById('inAddress').value || "Address";
+            document.getElementById('outAbout').innerText = document.getElementById('inAbout').value || "...";
+            document.getElementById('outDate').innerText = document.getElementById('inDate').value || "10-04-2026";
+            document.getElementById('outDec').innerText = document.getElementById('inDec').value;
+
+            const langOut = document.getElementById('outLang'); langOut.innerHTML = '';
+            document.getElementById('inLang').value.split(',').forEach(l => { if(l.trim()) langOut.innerHTML += `<li>🌐 ${l.trim()}</li>` });
+
+            const outEdu = document.getElementById('outEdu'); outEdu.innerHTML = '';
+            document.querySelectorAll('#eduList > div').forEach(div => {
+                outEdu.innerHTML += `<div class="mb-4"><div class="flex justify-between font-bold text-[12px]"><span>${div.querySelector('.edu-deg').value || 'Degree'}</span><span class="text-blue-600">${div.querySelector('.edu-dur').value || ''}</span></div><p class="text-[11px] text-slate-600 font-semibold">${div.querySelector('.edu-inst').value || ''}</p><p class="text-[10px] text-slate-400">Result: ${div.querySelector('.edu-gpa').value || ''}</p></div>`;
+            });
+
+            const outWork = document.getElementById('outWork'); outWork.innerHTML = '';
+            document.querySelectorAll('#workList > div').forEach(div => {
+                outWork.innerHTML += `<div class="mb-4"><div class="flex justify-between font-bold text-[12px]"><span>${div.querySelector('.work-pos').value || 'Position'}</span><span class="text-blue-600">${div.querySelector('.work-dur').value || ''}</span></div><p class="text-[11px] font-bold text-slate-700">${div.querySelector('.work-comp').value || ''}</p><p class="text-[10px] text-slate-500 italic">${div.querySelector('.work-desc').value || ''}</p></div>`;
+            });
+
+            const outSkills = document.getElementById('outSkills'); outSkills.innerHTML = '';
+            const accent = document.getElementById('accentColor').value;
+            document.querySelectorAll('#skillInputList > div').forEach(div => {
+                const name = div.querySelector('.skill-name').value;
+                const perc = div.querySelector('.skill-perc').value || 0;
+                outSkills.innerHTML += `<div><div class="flex justify-between text-[10px] font-bold mb-1 uppercase"><span>${name || 'Skill'}</span><span>${perc}%</span></div><div class="skill-bar-bg"><div class="skill-bar-fill" style="width: ${perc}%; background: ${accent}"></div></div></div>`;
+            });
+        }
+
+        function updateStyles() {
+            const bg = document.getElementById('bgColor').value;
+            const accent = document.getElementById('accentColor').value;
+            document.getElementById('sidebarUI').style.backgroundColor = bg;
+            document.getElementById('headerBorder').style.borderColor = accent;
+            
+            // Apply accent color to section titles
+            document.querySelectorAll('.section-title').forEach(st => {
+                st.style.borderLeftColor = accent;
+                st.style.background = hexToRGB(accent, 0.08);
+            });
+            sync();
+        }
+
+        function hexToRGB(hex, alpha) {
+            var r = parseInt(hex.slice(1, 3), 16), g = parseInt(hex.slice(3, 5), 16), b = parseInt(hex.slice(5, 7), 16);
+            return "rgba(" + r + ", " + g + ", " + b + ", " + alpha + ")";
+        }
+
+        function previewImage(event) {
+            const reader = new FileReader();
+            reader.onload = function(){ document.getElementById('outPhoto').src = reader.result; };
+            reader.readAsDataURL(event.target.files[0]);
+        }
+
+        function downloadPDF() {
+            const element = document.getElementById('cv-render');
+            html2pdf().set({ margin:0, filename:'Pro_CV.pdf', image:{type:'jpeg', quality:1}, html2canvas:{scale:3}, jsPDF:{unit:'mm', format:'a4', orientation:'portrait'} }).from(element).save();
+        }
+
+        addEdu(); addWork(); addSkill(); updateStyles();
+    </script>
+</body>
+  </html>
