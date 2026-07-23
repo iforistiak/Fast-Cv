@@ -17,7 +17,7 @@
         }
         .animate-header { animation: fadeInDown 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
 
-        /* Dark Mode Preferences */
+        /* নাইট মোড স্টাইলিং */
         .dark-mode { background-color: #0b0f19; color: #f8fafc; }
         .dark-mode .input-container { background: #111827; border-color: #1f2937; }
         .dark-mode .card-ui { background: #1f2937; border-color: #374151; color: #f8fafc; }
@@ -28,7 +28,7 @@
         .input-container { background: #ffffff; border-bottom: 1px solid #e2e8f0; padding: 24px 16px; }
         .card-ui { background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; padding: 20px; box-shadow: 0 2px 12px -2px rgba(0,0,0,0.03); }
 
-        /* Inner Dynamic Input Card Styling */
+        /* ইনপুট ফিল্ড বক্স স্টাইলিং */
         .inner-field-box {
             background: #ffffff;
             border: 1px solid #e2e8f0;
@@ -43,7 +43,7 @@
             box-shadow: 0 2px 8px rgba(0,0,0,0.02);
         }
 
-        /* Responsive Container Layout */
+        /* নিখুঁত A4 সাইজ (প্রিন্ট ও এক্সপোর্টের জন্য ফিক্সড) */
         .cv-wrapper { padding: 32px 16px; display: flex; flex-direction: column; align-items: center; gap: 24px; }
         .cv-page { 
             width: 210mm; 
@@ -74,7 +74,7 @@
         .styled-field { width: 100%; padding: 9px 12px; border: 1.5px solid #e2e8f0; border-radius: 8px; font-size: 13px; font-weight: 500; margin-bottom: 6px; outline: none; transition: all 0.2s; color: #0f172a; background: #ffffff; }
         .styled-field:focus { border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37,99,235,0.12); }
 
-        /* Photo Shapes */
+        /* ছবির শেপ অপশন */
         .shape-square { border-radius: 0px !important; }
         .shape-rounded { border-radius: 16px !important; }
         .shape-circle { border-radius: 9999px !important; }
@@ -90,7 +90,7 @@
             .cv-page { box-shadow: none; border: none; margin: 0; height: 297mm; max-height: 297mm; } 
         }
 
-        /* Desktop & Mobile Responsive Controls */
+        /* স্ক্রিন রেসপন্সিভনেস কেবল অন-স্ক্রিন ডিসপ্লের জন্য */
         @media (max-width: 1024px) {
             .cv-page-preview { transform: scale(0.85); transform-origin: top center; }
         }
@@ -101,36 +101,30 @@
 </head>
 <body>
 
-    <!-- 1. INPUT SECTION -->
+    <!-- ১. ইনপুট ফরম সেকশন -->
     <div class="input-container no-print">
         <div class="max-w-7xl mx-auto space-y-6">
             
-            <!-- BRAND HEADER (MATCHING THE UPLOADED DESIGN) -->
+            <!-- ব্র্যান্ড হেডার -->
             <div class="w-full bg-[#0d1527] rounded-3xl p-6 md:p-8 text-center shadow-xl border border-slate-800 animate-header relative overflow-hidden flex flex-col items-center justify-center min-h-[160px]">
-                <!-- Subtle Glow -->
                 <div class="absolute w-40 h-40 bg-blue-500/10 rounded-full blur-3xl pointer-events-none"></div>
 
                 <div class="flex items-center justify-center gap-3.5 mb-2">
-                    <!-- Electric Lightning Icon Box -->
                     <div class="w-12 h-12 md:w-14 md:h-14 rounded-2xl bg-gradient-to-tr from-blue-600 via-sky-400 to-cyan-300 flex items-center justify-center text-white text-2xl md:text-3xl font-black shadow-lg shadow-blue-500/30 transform hover:scale-105 transition">
                         ⚡
                     </div>
-                    <!-- Brand Title -->
                     <h1 class="text-4xl md:text-5xl font-black tracking-tight text-white">
                         FAST <span class="text-[#4b93ff]">CV</span>
                     </h1>
                 </div>
 
-                <!-- Subtitle Slogan -->
                 <p class="text-slate-400 font-extrabold text-[10px] md:text-[12px] uppercase tracking-[4px] mt-1">
                     BUILD YOUR PROFESSIONAL CV IN A MINUTE
                 </p>
             </div>
 
-            <!-- TOOLBAR & CUSTOMIZATION MENU -->
+            <!-- টুলবার ও কালার সেটিং -->
             <div class="flex flex-wrap gap-4 items-center justify-between bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700">
-                
-                <!-- Color Controls (Classic Clean Style) -->
                 <div class="flex flex-wrap items-center gap-4">
                     <div class="flex items-center gap-2">
                         <span class="text-xs font-bold text-slate-600 dark:text-slate-300 uppercase">Sidebar Color</span>
@@ -146,7 +140,6 @@
                     </div>
                 </div>
 
-                <!-- Action Buttons -->
                 <div class="flex flex-wrap items-center gap-2.5">
                     <button onclick="openMobilePreview()" class="lg:hidden bg-indigo-600 text-white px-3.5 py-2 rounded-xl font-bold text-xs uppercase tracking-wider shadow-md">
                         👁️ Preview
@@ -160,22 +153,21 @@
                     <button id="btnJpg" onclick="downloadJPG()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-xl font-bold text-xs uppercase shadow-md transition">
                         JPG
                     </button>
-                    <button onclick="downloadPDF()" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-xl font-bold text-xs uppercase shadow-md transition">
+                    <button id="btnPdf" onclick="downloadPDF()" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-xl font-bold text-xs uppercase shadow-md transition">
                         Download PDF
                     </button>
                 </div>
             </div>
 
-            <!-- TWO COLUMN RESPONSIVE INPUT FORM -->
+            <!-- ২ কলাম ইনপুট কার্ডস -->
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <!-- Column 1 -->
+                <!-- কলাম ১ -->
                 <div class="space-y-6">
                     <div class="card-ui">
                         <h4 class="font-bold mb-3 text-blue-600 border-b border-slate-100 dark:border-slate-800 pb-2 text-sm flex items-center justify-between">
                             <span>👤 Personal Details</span>
                         </h4>
                         
-                        <!-- Clean Photo Upload & Shape Picker -->
                         <div class="mb-4 p-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800">
                             <label class="text-[11px] font-bold text-slate-600 dark:text-slate-300 mb-1.5 block">Profile Photo & Shape</label>
                             <input type="file" accept="image/*" onchange="previewImage(event)" class="text-xs mb-3 block w-full text-slate-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
@@ -210,7 +202,7 @@
                     </div>
                 </div>
 
-                <!-- Column 2 -->
+                <!-- কলাম ২ -->
                 <div class="space-y-6">
                     <div class="card-ui">
                         <div class="flex justify-between items-center mb-3"><h4 class="font-bold text-blue-600 text-sm">💼 Work Experience</h4><button onclick="addWork()" class="text-blue-600 text-[11px] font-bold hover:underline">+ ADD EXPERIENCE</button></div>
@@ -244,7 +236,7 @@
         </div>
     </div>
 
-    <!-- 2. CV PREVIEW SECTION (DESKTOP & MOBILE RESPONSIVE) -->
+    <!-- ২. সিভি প্রিভিউ সেকশন -->
     <div class="cv-wrapper max-w-7xl mx-auto">
         <div class="no-print flex items-center justify-between w-full max-w-5xl px-2">
             <div class="flex items-center gap-2">
@@ -256,10 +248,10 @@
             </button>
         </div>
         
-        <!-- CV RENDER AREA -->
+        <!-- লাইভ প্রিভিউ কন্টেইনার -->
         <div class="overflow-x-auto w-full flex justify-center py-2">
             <div id="cv-render" class="cv-page cv-page-preview">
-                <!-- Sidebar -->
+                <!-- সাইডবার -->
                 <div id="sidebarUI" class="sidebar bg-slate-900 text-white">
                     <div class="w-full aspect-square bg-white shadow-md mb-6 overflow-hidden border-2 border-white transition-all duration-300 shape-rounded" id="photoContainer">
                         <img id="outPhoto" src="https://via.placeholder.com/400" class="w-full h-full object-cover">
@@ -292,7 +284,7 @@
                     </div>
                 </div>
 
-<!-- Main Content -->
+                <!-- মেইন কনটেন্ট -->
                 <div class="main-content">
                     <div class="mb-6 border-l-[8px] pl-4 border-blue-600" id="headerBorder">
                         <h5 class="text-blue-600 font-black text-[9px] tracking-[6px] mb-1 uppercase">Curriculum Vitae</h5>
@@ -322,10 +314,9 @@
             </div>
         </div>
 
-        <!-- COMPACT & INFORMATIVE PREMIUM FOOTER -->
+        <!-- প্রফেশনাল ফুটার -->
         <footer class="no-print w-full max-w-5xl mx-auto mt-6 mb-8">
             <div class="bg-slate-900 text-white rounded-2xl p-4 md:p-5 border border-slate-800 shadow-xl space-y-3">
-                <!-- Line 1: Key Feature Badges -->
                 <div class="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-slate-800 text-xs">
                     <div class="flex items-center gap-2">
                         <span class="bg-blue-600 text-white px-2 py-0.5 rounded text-[11px] font-black">FAST CV</span>
@@ -339,14 +330,12 @@
                     </div>
                 </div>
 
-                <!-- Line 2: Developer Credit & Copyright Info -->
                 <div class="flex flex-col sm:flex-row items-center justify-between gap-2 text-[11px] text-slate-400">
                     <div>
                         Developed with ❤️ by <span class="font-bold text-white">Md. Istiak Islam</span>
                     </div>
                     <div class="flex items-center gap-3 text-[10px]">
                         <span>✉️ iforistiak@gmail.com</span>
-                        <span>📞 +880 178683 7475</span>
                         <span class="text-slate-500">© 2026 All Rights Reserved</span>
                     </div>
                 </div>
@@ -354,18 +343,17 @@
         </footer>
     </div>
 
-    <!-- MOBILE FULLSCREEN PREVIEW MODAL -->
+    <!-- মোবাইল ফুলস্ক্রিন প্রিভিউ মোডাল -->
     <div id="mobileModal" class="fixed inset-0 bg-slate-900/90 z-50 hidden flex-col items-center justify-center p-4 backdrop-blur-sm">
         <div class="bg-white rounded-2xl p-3 w-full max-w-xs flex justify-between items-center mb-3 shadow-lg">
             <span class="text-xs font-bold text-slate-800">CV Fullscreen Preview</span>
             <button onclick="closeMobilePreview()" class="bg-red-500 text-white text-xs px-3 py-1 rounded-lg font-bold">Close ✕</button>
         </div>
         <div class="overflow-auto max-h-[85vh] max-w-full rounded-xl shadow-2xl bg-white p-2" id="modalCanvasContainer">
-            <!-- Render Target Clone -->
         </div>
     </div>
 
-    <!-- SCRIPT SECTION -->
+    <!-- জাভাস্ক্রিপ্ট সেকশন -->
     <script>
         let currentPhotoShape = 'shape-rounded';
 
@@ -410,7 +398,7 @@
                     <input type="text" placeholder="Start Date" class="styled-field text-xs work-start" oninput="sync()">
                     <input type="text" placeholder="End Date" class="styled-field text-xs work-end" oninput="sync()">
                 </div>
-                <textarea placeholder="Key responsibilities..." class="styled-field text-xs work-desc h-12 mb-0"></textarea>
+                <textarea placeholder="Key responsibilities..." class="styled-field text-xs work-desc h-12 mb-0" oninput="sync()"></textarea>
             `); 
         }
 
@@ -506,7 +494,6 @@
         function previewImage(e) { const r = new FileReader(); r.onload = () => document.getElementById('outPhoto').src = r.result; r.readAsDataURL(e.target.files[0]); }
         function getSafeName() { return (document.getElementById('inName').value || "FAST_CV").replace(/\s+/g, '_'); }
 
-        // Mobile Fullscreen Modal Control
         function openMobilePreview() {
             const modal = document.getElementById('mobileModal');
             const container = document.getElementById('modalCanvasContainer');
@@ -528,37 +515,88 @@
             modal.classList.remove('flex');
         }
 
-        // Single Page Export Handling
+        /* -------------------------------------------------------------
+           নিখুঁত A4 রেন্ডারিং ফাংশন (ডাউনলোডের সময় মোবাইল স্কেলিং রিমুভ করে)
+        ------------------------------------------------------------- */
+        function createExportableCVClone() {
+            const original = document.getElementById('cv-render');
+            const clone = original.cloneNode(true);
+            clone.id = 'cv-render-export-clone';
+            
+            // মোবাইল বা অন-স্ক্রিন CSS স্কেল পুরোপুরি উঠিয়ে একদম নিখুঁত A4 ডাইমেনশনে ফিক্স করা
+            clone.style.transform = 'none';
+            clone.style.margin = '0';
+            clone.style.width = '210mm';
+            clone.style.height = '297mm';
+            clone.style.minHeight = '297mm';
+            clone.style.maxHeight = '297mm';
+            clone.style.position = 'fixed';
+            clone.style.left = '-9999px';
+            clone.style.top = '0';
+            clone.style.zIndex = '-9999';
+            
+            document.body.appendChild(clone);
+            return clone;
+        }
+
+        // PDF এক্সপোর্ট ফিক্স
         function downloadPDF() { 
-            const element = document.getElementById('cv-render');
+            const btn = document.getElementById('btnPdf');
+            const originalText = btn.innerText;
+            btn.innerText = "Processing...";
+
+            const clone = createExportableCVClone();
+
             const opt = {
                 margin: 0,
                 filename: getSafeName() + '.pdf',
                 image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2, useCORS: true, logging: false },
+                html2canvas: { scale: 2, useCORS: true, logging: false, scrollX: 0, scrollY: 0, windowWidth: 1024 },
                 jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
                 pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
             };
-            html2pdf().set(opt).from(element).save(); 
+
+            html2pdf().set(opt).from(clone).save().then(() => {
+                document.body.removeChild(clone);
+                btn.innerText = originalText;
+            }).catch(err => {
+                document.body.removeChild(clone);
+                alert("Failed to export PDF.");
+                btn.innerText = originalText;
+            });
         }
 
+        // JPG এক্সপোর্ট ফিক্স
         function downloadJPG() {
             const btn = document.getElementById('btnJpg'); 
-            btn.innerText = "...";
-            html2canvas(document.getElementById('cv-render'), { scale: 3, useCORS: true, backgroundColor: "#ffffff" }).then(canvas => {
+            const originalText = btn.innerText;
+            btn.innerText = "Processing...";
+
+            const clone = createExportableCVClone();
+
+            html2canvas(clone, { 
+                scale: 3, 
+                useCORS: true, 
+                backgroundColor: "#ffffff",
+                scrollX: 0,
+                scrollY: 0,
+                windowWidth: 1024
+            }).then(canvas => {
                 const link = document.createElement('a'); 
                 link.download = getSafeName() + '.jpg'; 
                 link.href = canvas.toDataURL("image/jpeg", 0.95); 
                 link.click(); 
-                btn.innerText = "JPG";
+                document.body.removeChild(clone);
+                btn.innerText = originalText;
             }).catch(err => {
+                document.body.removeChild(clone);
                 alert("Failed to export JPG");
-                btn.innerText = "JPG";
+                btn.innerText = originalText;
             });
         }
 
-        // Initialize Defaults
+        // ইনিশিয়াল ডাটা সেটআপ
         addEdu(); addWork(); addSkill(); updateStyles();
     </script>
 </body>
-</html>
+    </html>
